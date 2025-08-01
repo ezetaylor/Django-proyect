@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Seleccionar Curso y Fecha{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">🗓️ Registro de Asistencias</h2>
+  <p>Seleccioná el curso y la fecha para registrar asistencias:</p>
+  
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="id_curso" class="form-label">Curso</label>
+      {{ form.curso }}
+    </div>
+
+    <div class="mb-3">
+      <label for="id_fecha" class="form-label">Fecha</label>
+      {{ form.fecha }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Continuar ➡️</button>
+    <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary ms-2">Volver al Panel</a>
+  </form>
+</div>
+{% endblock %}

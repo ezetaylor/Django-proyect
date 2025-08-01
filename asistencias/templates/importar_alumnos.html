@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Importar Alumnos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Importar Alumnos desde CSV</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <input type="file" name="archivo" accept=".csv" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Importar archivo</button>
+  </form>
+  <small class="text-muted mt-2 d-block">
+    El archivo debe tener las columnas: <code>nombre;apellido;curso</code>
+  </small>
+
+  {% if resumen %}
+    <div class="alert alert-info mt-4">
+      <strong>Importación finalizada:</strong><br>
+      ✅ Alumnos nuevos agregados: {{ resumen.agregados }}<br>
+      ⚠️ Alumnos ya existentes: {{ resumen.existentes }}
+    </div>
+  {% endif %}
+</div>
+
+<a href="{% url 'dashboard' %}" class="btn btn-outline-secondary mt-3">
+  ← Volver al Panel
+</a>
+
+{% endblock %}

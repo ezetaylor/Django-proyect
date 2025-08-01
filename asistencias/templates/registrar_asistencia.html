@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar/Modificar Asistencias{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h2>Asistencias para {{ curso.nombre }} — {{ fecha }}</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="table-responsive mt-4">
+        <table class="table table-bordered table-hover table-sm text-center align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Alumno</th>
+              <th>Tipo de Asistencia</th>
+              <th>Observación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for alumno, asistencia in filas %}
+            <tr{% if asistencia and asistencia.tipo_asistencia.nombre|lower == "ausente" %} class="table-danger"{% endif %}>
+              <td class="text-start px-2">{{ alumno.apellido }}, {{ alumno.nombre }}</td>
+
+              <td>
+                <select name="tipo_{{ alumno.id }}" class="form-select form-select-sm">
+                  {% for tipo in tipos %}
+                    <option value="{{ tipo.id }}"
+                      {% if asistencia and tipo.id == asistencia.tipo_asistencia.id %}selected{% endif %}>
+                      {{ tipo.descripcion }}
+                    </option>
+                  {% endfor %}
+                </select>
+              </td>
+
+              <td>
+                <input type="text" name="observacion_{{ alumno.id }}"
+                       class="form-control form-control-sm"
+                       value="{% if asistencia %}{{ asistencia.observacion }}{% endif %}">
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="text-end mt-4">
+        <button type="submit" class="btn btn-primary">💾 Guardar Asistencias</button>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary ms-2">↩ Volver</a>
+      </div>
+    </form>
+    <form method="POST" action="{% url 'eliminar_asistencias_dia' %}" onsubmit="return confirm('¿Estás seguro de que querés eliminar todas las asistencias del día?');">
+      {% csrf_token %}
+      <input type="hidden" name="fecha" value="{{ fecha_str }}">
+      <input type="hidden" name="curso_id" value="{{ curso_id }}">
+      <div class="text-end mt-3">
+        <button type="submit" class="btn btn-danger">🗑 Eliminar Asistencias del Día</button>
+      </div>
+    </form>
+
+  </div>
+  <p>Fecha seleccionada: {{ fecha|date:'Y-m-d' }}</p>
+
+{% endblock %}

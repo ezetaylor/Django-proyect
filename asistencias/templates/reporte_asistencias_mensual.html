@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row mb-4">
+    <div class="col text-center">
+      <h2 class="fw-bold">Reporte de Asistencias Mensual</h2>
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <div class="col-md-4">
+      <p><strong>Curso:</strong> {{ curso.nombre }}</p>
+    </div>
+    <div class="col-md-4">
+      <p><strong>Mes:</strong> {{ mes }}</p>
+    </div>
+    <div class="col-md-4">
+      <p><strong>Año:</strong> {{ año }}</p>
+    </div>
+  </div>
+
+  <div class="card mb-4">
+  <div class="card-header bg-info text-white fw-bold">
+    Parámetros del mes
+  </div>
+  <div class="card-body">
+    <form id="parametros-form" class="row g-3">
+      <div class="col-md-4">
+        <label for="diasHabiles" class="form-label">Días hábiles</label>
+        <input type="number" id="diasHabiles" class="form-control" min="1">
+      </div>
+      <div class="col-md-4">
+        <label for="cantidadAlumnos" class="form-label">Cantidad de alumnos</label>
+        <input type="number" id="cantidadAlumnos" class="form-control" value="{{ cantidad_alumnos }}" readonly>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Total esperado de registros</label>
+        <input type="number" id="totalEsperado" class="form-control" readonly>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  const diasInput = document.getElementById("diasHabiles");
+  const alumnosInput = document.getElementById("cantidadAlumnos");
+  const totalInput = document.getElementById("totalEsperado");
+
+  diasInput.addEventListener("input", () => {
+    const dias = parseInt(diasInput.value) || 0;
+    const alumnos = parseInt(alumnosInput.value) || 0;
+    totalInput.value = dias * alumnos;
+  });
+</script>
+
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Alumno</th>
+          <th>Asistencias</th>
+          <th>Inasistencias</th>
+          <th>Total de Días</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fila in reporte %}
+        <tr>
+          <td>{{ fila.alumno }}</td>
+          <td>{{ fila.asistencias }}</td>
+          <td>{{ fila.inasistencias }}</td>
+          <td>{{ fila.total }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      <tfoot class="table-light fw-bold">
+        <tr>
+          <td>Total general</td>
+          <td>{{ total_asistencias }}</td>
+          <td>{{ total_inasistencias }}</td>
+          <td>{{ total_general }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="d-flex justify-content-end mt-4">
+    <a href="{% url 'panel_preceptor' %}" class="btn btn-secondary">Volver al Panel</a>
+  </div>
+</div>
+{% endblock %}

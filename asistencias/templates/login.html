@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+  <div class="card shadow-lg p-4" style="width: 100%; max-width: 420px;">
+    <h3 class="text-center mb-4">Ingreso al Panel de Preceptor</h3>
+
+    {% if form.errors %}
+      <div class="alert alert-danger" role="alert">
+        Usuario o contraseña incorrectos. Intentá nuevamente.
+      </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{% url 'dashboard' %}">
+
+      <div class="mb-3">
+        <label for="id_username" class="form-label">Usuario</label>
+        {{ form.username|add_class:"form-control" }}
+
+      </div>
+
+      <div class="mb-3">
+        <label for="id_password" class="form-label">Contraseña</label>
+        {{ form.password|add_class:"form-control" }}
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">Ingresar</button>
+    </form>
+
+    <hr>
+    <p class="text-center text-muted mb-0" style="font-size: 0.9rem;">
+      Solo preceptores autorizados pueden acceder al sistema.
+    </p>
+  </div>
+</div>
+{% endblock %}

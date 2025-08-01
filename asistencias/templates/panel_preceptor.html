@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel de Preceptor{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <h1>Bienvenido, {{ usuario.get_full_name|default:usuario.username }} 👋</h1>
+    <p class="lead">Elige una opción para comenzar:</p>
+
+    <div class="row">
+      <!-- Tarjeta: Registrar Asistencia -->
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Registrar Asistencia</h5>
+            <p class="card-text">Marcar asistencias de forma masiva o individual.</p>
+            <a href="{% url 'seleccionar_curso' %}" class="btn btn-primary">Ir</a>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Tarjeta: Cargar Alumnos -->
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Cargar alumnos</h5>
+            <p class="card-text">Agregar alumnos de manera individual o masiva a tus cursos.</p>
+            <a href="{% url 'agregar_alumno' %}" class="btn btn-primary">Ir</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta: Ver Asistencias por Mes -->
+      <div class="col-md-4 mb-4">
+        <div class="card border-info shadow-sm h-100">
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title text-info">📊 Ver Asistencias por Mes</h5>
+            <p class="card-text">Visualizá los registros mensuales por alumno, curso y totales.</p>
+            <form method="get" action="{% url 'reporte_asistencias_mensual' %}" class="mt-auto">
+              <div class="mb-2">
+                <select name="curso_id" class="form-select form-select-sm" required>
+                  <option value="">Curso...</option>
+                    {% for asignado in cursos_asignados %}
+                        <option value="{{ asignado.curso.id }}">{{ asignado.curso.nombre }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+              <div class="mb-2">
+                <select name="mes">
+                  {% for mes_num, mes_nombre in meses %}
+                    <option value="{{ mes_num }}" {% if mes_num == mes_actual %}selected{% endif %}>{{ mes_nombre }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="mb-2">
+              <select name="año">
+                {% for año_valor, año_texto in años_disponibles %}
+                  <option value="{{ año_valor }}" {% if año_valor == año_actual %}selected{% endif %}>{{ año_texto }}</option>
+                {% endfor %}
+              </select>
+              </div>
+              <button type="submit" class="btn btn-outline-info w-100 btn-sm">Ir al Reporte</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+{% endblock %}

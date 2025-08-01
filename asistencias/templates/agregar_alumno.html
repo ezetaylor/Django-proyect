@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Agregar Alumno{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Alta de Alumno</h2>
+  <p class="lead">Podés agregar alumnos manualmente o importar una lista desde archivo CSV.</p>
+
+  <div class="row">
+    <!-- 🧍‍♂️ Formulario individual -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          Agregar Manualmente
+        </div>
+        <div class="card-body">
+          <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-success w-100">Guardar Alumno</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- 📦 Importación masiva -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-header bg-secondary text-white">
+          Cargar desde CSV
+        </div>
+        <div class="card-body">
+          <p>Seleccioná un archivo CSV con los datos: <br><code>nombre,apellido,curso</code></p>
+          <form method="post" enctype="multipart/form-data" action="{% url 'importar_alumnos' %}">
+            {% csrf_token %}
+            <input type="file" name="archivo" accept=".csv" class="form-control mb-3" required>
+            <button type="submit" class="btn btn-secondary w-100">Importar archivo</button>
+          </form>
+          <small class="text-muted mt-2 d-block">Ejemplo: Camila,Martínez,2°B</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
